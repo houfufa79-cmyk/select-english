@@ -1,0 +1,44 @@
+<view class="container">
+  <!-- 进度条 -->
+  <view class="progress-wrap">
+    <view class="progress-bar" style="width: {{ progressPct }}%"></view>
+    <view class="progress-text">{{ currentIdx + 1 }} / {{ total }}</view>
+  </view>
+
+  <!-- 分数 -->
+  <view class="score-chip">当前得分：<text class="score-num">{{ totalScore }}</text></view>
+
+  <!-- 题目 -->
+  <view class="q-card" wx:if="{{ current }}">
+    <view class="q-num">第 {{ current.id }} 题</view>
+    <view class="q-en">{{ current.en }}</view>
+
+    <view class="opts">
+      <view
+        wx:for="{{ current.options }}" wx:for-item="opt" wx:for-index="idx" wx:key="*this"
+        class="opt {{ feedback ? (idx === current.correctIdx ? 'right' : (idx === chosenIdx ? 'wrong' : '')) : (chosenIdx === idx ? 'chosen' : '') }}"
+        data-idx="{{ idx }}"
+        bindtap="onOptTap"
+      >
+        <text class="opt-label">{{ labelMap[idx] }}</text>
+        <text class="opt-text">{{ opt }}</text>
+        <text wx:if="{{ feedback && idx === current.correctIdx }}" class="opt-mark">✓</text>
+        <text wx:if="{{ feedback && idx === chosenIdx && idx !== current.correctIdx }}" class="opt-mark">✗</text>
+      </view>
+    </view>
+
+    <!-- 反馈 -->
+    <view class="feedback" wx:if="{{ feedback }}">
+      <view class="fb-score">本题：+{{ questionScore }} 分</view>
+      <view class="fb-ans">✎ 正确答案：{{ current.correctZh }}</view>
+    </view>
+  </view>
+
+  <!-- 操作 -->
+  <view class="actions">
+    <button wx:if="{{ !feedback }}" class="btn-primary act-btn disabled" disabled>请选择一个翻译</button>
+    <button wx:if="{{ feedback }}" class="btn-primary act-btn" bindtap="onNext">
+      {{ currentIdx + 1 < total ? '下一题 →' : '查看结果' }}
+    </button>
+  </view>
+</view>

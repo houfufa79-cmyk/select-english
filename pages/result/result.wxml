@@ -1,0 +1,33 @@
+<view class="container">
+  <view class="hero">
+    <view class="hero-emoji">{{ emoji }}</view>
+    <view class="hero-title">{{ title }}</view>
+    <view class="hero-sub">{{ subtitle }}</view>
+  </view>
+
+  <view class="big-score">
+    <view class="score-num">{{ totalScore }}</view>
+    <view class="score-label">总得分（满分 {{ totalMax }}）</view>
+    <view class="score-pct">{{ accuracy }}% 正确率</view>
+  </view>
+
+  <view class="card">
+    <view class="card-title">📋 每题详情</view>
+    <view class="q-item" wx:for="{{ questions }}" wx:key="id">
+      <view class="q-head">
+        <text class="q-label">第 {{ index + 1 }} 题</text>
+        <text class="q-score {{ item.correct ? 'perfect' : '' }}">{{ item.questionScore > 0 ? '+' : '' }}{{ item.questionScore }}</text>
+      </view>
+      <view class="q-en">{{ item.en }}</view>
+      <view class="q-choice {{ item.correct ? 'good' : 'bad' }}">
+        你的选择：{{ item.chosenZh }}
+      </view>
+      <view class="q-answer">✎ 正确答案：{{ item.correctZh }}</view>
+    </view>
+  </view>
+
+  <view class="actions">
+    <button class="btn-secondary" bindtap="onHome">回到首页</button>
+    <button class="btn-primary act-btn" bindtap="onRetry">再来一轮</button>
+  </view>
+</view>

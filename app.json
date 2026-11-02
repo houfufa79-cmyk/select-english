@@ -1,0 +1,17 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/practice/practice",
+    "pages/result/result"
+  ],
+  "window": {
+    "navigationBarTitleText": "英语断句练习",
+    "navigationBarBackgroundColor": "#2c5364",
+    "navigationBarTextStyle": "white",
+    "backgroundColor": "#f4f7fb",
+    "disableScroll": false,
+    "pageOrientation": "portrait"
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json"
+}

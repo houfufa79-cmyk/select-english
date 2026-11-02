@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>英语翻译练习 · Quiz</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body { height: 100%; background: linear-gradient(180deg, #2c5364 0%, #203a43 100%);
+    font-family: -apple-system, "PingFang SC", "Helvetica Neue", sans-serif; color: #fff; overflow-x: hidden; }
+  .wrap { max-width: 520px; margin: 0 auto; min-height: 100vh; padding: 16px; }
+
+  .hero { text-align: center; padding: 50px 0 30px; }
+  .hero-emoji { font-size: 88px; line-height: 1; }
+  .hero-title { font-size: 36px; font-weight: 900; margin-top: 10px; color: #ffd54f; letter-spacing: 1px; }
+  .hero-sub { font-size: 14px; opacity: .7; margin-top: 4px; }
+
+  .card { background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.15); border-radius: 14px; padding: 18px; margin-bottom: 12px; }
+
+  .stat-row { display: flex; align-items: center; justify-content: space-around; padding: 6px 0; }
+  .stat { text-align: center; }
+  .stat-num { font-size: 32px; font-weight: 900; color: #ffd54f; }
+  .stat-label { font-size: 12px; opacity: .7; margin-top: 2px; }
+  .stat-divider { width: 1px; height: 36px; background: rgba(255,255,255,.2); }
+
+  .card-title { font-size: 16px; font-weight: 700; margin-bottom: 8px; }
+  .rule-item { font-size: 13px; line-height: 1.9; opacity: .9; }
+
+  .diff-row { display: flex; align-items: center; gap: 10px; margin: 14px 0 20px; }
+  .diff-label { font-size: 14px; opacity: .8; }
+  .diff-opts { display: flex; gap: 8px; }
+  .diff-opt { padding: 5px 16px; font-size: 13px; cursor: pointer; user-select: none;
+    background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.25);
+    border-radius: 999px; color: rgba(255,255,255,.85); transition: all .15s; }
+  .diff-opt.on { background: linear-gradient(180deg,#ffd54f,#ffb300); color: #4e2c00; border-color: transparent; font-weight: 700; }
+
+  .btn-primary { display: block; width: 100%; cursor: pointer;
+    background: linear-gradient(180deg, #ffd54f, #ffb300); color: #4e2c00;
+    font-size: 17px; font-weight: 700; text-align: center; border-radius: 999px;
+    padding: 13px 0; border: none; box-shadow: 0 4px 0 #c17900, 0 8px 20px rgba(0,0,0,.3); }
+  .btn-primary:active { transform: translateY(2px); box-shadow: 0 2px 0 #c17900; }
+  .btn-secondary { cursor: pointer; background: rgba(255,255,255,.15); color: #fff; font-size: 14px;
+    padding: 10px 22px; border-radius: 999px; border: 1px solid rgba(255,255,255,.25); }
+  .tip-txt { text-align: center; font-size: 11px; opacity: .55; margin-top: 14px; }
+
+  /* Practice */
+  .progress-wrap { position: relative; height: 6px; background: rgba(255,255,255,.15); border-radius: 999px; overflow: hidden; margin-top: 4px; }
+  .progress-bar { height: 100%; background: linear-gradient(90deg, #ffd54f, #ff8f00); border-radius: 999px; transition: width .25s; }
+  .progress-text { position: absolute; right: 0; top: -26px; font-size: 12px; opacity: .7; }
+  .score-chip { text-align: center; margin: 24px 0 16px; font-size: 13px; opacity: .8; }
+  .score-num { font-size: 24px; font-weight: 900; color: #ffd54f; margin-left: 4px; }
+  .q-card { background: rgba(255,255,255,.08); border-radius: 16px; padding: 22px 16px; }
+  .q-num { font-size: 13px; opacity: .6; margin-bottom: 10px; }
+  .q-en { font-size: 19px; color: #fff; line-height: 1.65; padding: 14px;
+    background: linear-gradient(135deg, rgba(255,213,79,.12), rgba(139,0,0,.08));
+    border-radius: 10px; border-left: 4px solid #ffd54f; margin-bottom: 18px; }
+
+  .opts { display: flex; flex-direction: column; gap: 10px; }
+  .opt { display: flex; align-items: center; padding: 13px 14px; cursor: pointer;
+    background: rgba(255,255,255,.06); border: 2px solid rgba(255,255,255,.15);
+    border-radius: 10px; font-size: 15px; color: rgba(255,255,255,.9); transition: all .15s; }
+  .opt:active { transform: scale(.98); }
+  .opt-label { display: inline-flex; align-items: center; justify-content: center;
+    width: 26px; height: 26px; border-radius: 50%; margin-right: 12px; flex-shrink: 0;
+    background: rgba(255,255,255,.1); color: #ffd54f; font-weight: 700; font-size: 13px; }
+  .opt-text { flex: 1; }
+  .opt-mark { font-size: 24px; margin-left: 6px; }
+  .opt.chosen { border-color: #ffd54f; background: linear-gradient(135deg, rgba(255,213,79,.22), rgba(255,143,0,.14)); }
+  .opt.right  { border-color: #52c41a; background: rgba(82,196,26,.2); color: #95de64; }
+  .opt.wrong  { border-color: #ff4d4f; background: rgba(255,77,79,.18); color: #ff7875; }
+
+  .feedback { margin-top: 14px; padding: 12px; background: rgba(0,0,0,.2); border-radius: 10px; }
+  .fb-score { font-size: 17px; font-weight: 700; color: #ffd54f; margin-bottom: 4px; }
+  .fb-ans { font-size: 14px; opacity: .85; color: #fff; }
+
+  .actions { margin-top: 20px; }
+  .actions .btn-primary { width: 100%; }
+  .actions .disabled { opacity: .55; }
+
+  /* Result */
+  .r-hero { text-align: center; padding: 28px 0 12px; }
+  .r-hero-emoji { font-size: 64px; line-height: 1; }
+  .r-hero-title { font-size: 26px; font-weight: 900; margin-top: 6px; color: #ffd54f; }
+  .r-hero-sub { font-size: 13px; opacity: .7; margin-top: 3px; }
+
+  .big-score { text-align: center; padding: 20px 0; margin-bottom: 10px; background: rgba(255,255,255,.06); border-radius: 14px; }
+  .score-num { font-size: 64px; font-weight: 900; color: #ffd54f; line-height: 1; }
+  .score-label { font-size: 13px; opacity: .7; margin-top: 5px; }
+  .score-pct { display: inline-block; margin-top: 8px; font-size: 15px; font-weight: 700;
+    padding: 3px 14px; border-radius: 999px; background: rgba(255,213,79,.15); color: #ffd54f; }
+
+  .q-item { padding: 12px 0; border-bottom: 1px dashed rgba(255,255,255,.12); }
+  .q-item:last-child { border-bottom: none; }
+  .q-head { display: flex; justify-content: space-between; margin-bottom: 4px; }
+  .q-label { font-size: 11px; opacity: .6; }
+  .q-score { font-size: 15px; font-weight: 700; }
+  .q-en { font-size: 15px; color: #fff; line-height: 1.55; padding: 10px; background: rgba(255,213,79,.08); border-radius: 8px; margin-bottom: 8px; }
+  .q-choice { font-size: 14px; padding: 6px 10px; border-radius: 6px; margin-bottom: 5px; }
+  .q-choice.good { background: rgba(82,196,26,.2); color: #95de64; }
+  .q-choice.bad  { background: rgba(255,77,79,.18); color: #ff7875; }
+  .q-answer { font-size: 13px; opacity: .85; padding: 6px 10px; background: rgba(0,0,0,.18); border-radius: 6px; }
+
+  .actions { display: flex; gap: 10px; margin-top: 16px; }
+  .actions .btn-secondary { flex: 1; }
+  .actions .btn-primary { flex: 2; }
+
+  .page { display: none; }
+  .page.active { display: block; }
+</style>
+</head>
+<body>
+<div class="wrap" id="app">
+
+  <!-- Home -->
+  <div class="page active" id="page-home">
+    <div class="hero">
+      <div class="hero-emoji">📚</div>
+      <div class="hero-title">英语翻译练习</div>
+      <div class="hero-sub">三个中文选项 · 选一个对的</div>
+    </div>
+    <div class="card">
+      <div class="stat-row">
+        <div class="stat"><div class="stat-num" id="highestScore">0</div><div class="stat-label">最高满分</div></div>
+        <div class="stat-divider"></div>
+        <div class="stat"><div class="stat-num" id="totalRounds">0</div><div class="stat-label">累计练习</div></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">📖 玩法</div>
+      <div class="rule-item">• 每次随机 N 道题</div>
+      <div class="rule-item">• 每题三个中文翻译，选正确的</div>
+      <div class="rule-item">• 选对 +10 分 · 选错 -5 分</div>
+      <div class="rule-item">• 干扰项从题库随机抽取</div>
+    </div>
+    <div class="diff-row">
+      <div class="diff-label">题数</div>
+      <div class="diff-opts" id="countOpts">
+        <div class="diff-opt" data-count="5">5 题</div>
+        <div class="diff-opt on" data-count="10">10 题</div>
+        <div class="diff-opt" data-count="15">15 题</div>
+      </div>
+    </div>
+    <button class="btn-primary" id="startBtn">开始练习</button>
+    <div class="tip-txt">题库共 <span id="totalSentences">0</span> 句</div>
+  </div>
+
+  <!-- Practice -->
+  <div class="page" id="page-practice">
+    <div class="progress-wrap">
+      <div class="progress-bar" id="progressBar" style="width:0%"></div>
+      <div class="progress-text"><span id="curIdx">0</span> / <span id="totalCnt">0</span></div>
+    </div>
+    <div class="score-chip">当前得分：<span class="score-num" id="totalScore">0</span></div>
+    <div class="q-card">
+      <div class="q-num" id="qNum">第 0 题</div>
+      <div class="q-en" id="qEn"></div>
+      <div class="opts" id="opts"></div>
+      <div class="feedback" id="feedback" style="display:none">
+        <div class="fb-score">本题：+<span id="questionScore">0</span> 分</div>
+        <div class="fb-ans">✎ 正确答案：<span id="correctZh"></span></div>
+      </div>
+    </div>
+    <div class="actions">
+      <button class="btn-primary disabled" id="nextBtn" disabled>请选择一个翻译</button>
+    </div>
+  </div>
+
+  <!-- Result -->
+  <div class="page" id="page-result">
+    <div class="r-hero">
+      <div class="r-hero-emoji" id="rEmoji">🌟</div>
+      <div class="r-hero-title" id="rTitle">Great Job!</div>
+      <div class="r-hero-sub" id="rSub">Keep talking like a native</div>
+    </div>
+    <div class="big-score">
+      <div class="score-num" id="rTotal">0</div>
+      <div class="score-label">总得分（满分 <span id="rMax">0</span>）</div>
+      <div class="score-pct" id="rPct">0%</div>
+    </div>
+    <div class="card">
+      <div class="card-title">📋 每题详情</div>
+      <div id="qList"></div>
+    </div>
+    <div class="actions">
+      <button class="btn-secondary" id="homeBtn">回到首页</button>
+      <button class="btn-primary" id="retryBtn">再来一轮</button>
+    </div>
+  </div>
+
+</div>
+
+<script type="text/plain" id="sentences-txt">
+I like apples and oranges. || 我喜欢苹果和橙子。
+She is a student at Beijing University. || 她是北京大学的学生。
+We go to school by bus every day. || 我们每天乘公交车上学。
+He reads newspapers in the morning. || 他早上看报纸。
+My father works in a hospital. || 我父亲在一家医院工作。
+They play football on weekends. || 他们周末踢足球。
+The cat is sleeping on the sofa. || 那只猫正在沙发上睡觉。
+I drink a cup of coffee after lunch. || 午饭后我喝一杯咖啡。
+She speaks English, Chinese, and Japanese. || 她会说英语、中文和日语。
+We had a big dinner last night. || 昨晚我们吃了一顿大餐。
+He bought a new bike yesterday. || 他昨天买了一辆新自行车。
+The weather is very beautiful today. || 今天天气非常好。
+I will call you tomorrow morning. || 我明天早上会给你打电话。
+She is going to visit her grandmother next week. || 她下周要去看望她的奶奶。
+We have lived in this city for ten years. || 我们在这座城市住了十年了。
+He has studied English since 2010. || 他从 2010 年就开始学英语了。
+The book which I bought yesterday is very interesting. || 我昨天买的那本书非常有趣。
+This is the park where we first met. || 这是我们初次相遇的公园。
+I don't know why he was late. || 我不知道他为什么迟到了。
+Can you tell me where the station is? || 你能告诉我车站在哪里吗？
+Let's go to the movie tonight. || 我们今晚去看电影吧。
+I heard that Tom got married. || 我听说汤姆结婚了。
+She looks very happy today. || 她今天看起来很开心。
+We are going to have a meeting at three. || 我们三点要开会。
+He decided to quit his job. || 他决定辞职。
+It takes two hours to get there. || 到那里要两个小时。
+I am busy with my homework right now. || 我现在正忙着做作业。
+She was born on May 1st, 1995. || 她出生于 1995 年 5 月 1 日。
+The children are playing in the garden. || 孩子们正在花园里玩。
+We should help each other more often. || 我们应该更经常地互相帮助。
+If it rains tomorrow, we will stay at home. || 如果明天下雨，我们就待在家里。
+Although he is very young, he is very talented. || 虽然他很年轻，但他很有天赋。
+As soon as I arrive I will call you. || 我一到就会给你打电话。
+I will wait for you until you come. || 我会等你直到你到来。
+She kept studying until midnight. || 她一直学习到深夜。
+The movie was so boring that we left early. || 这部电影太无聊了，所以我们提前走了。
+I was so tired that I fell asleep immediately. || 我太累了，立刻就睡着了。
+He is not only a good student but also a great athlete. || 他不仅是个好学生，还是个很棒的运动员。
+Neither Tom nor Jerry knows the answer. || 汤姆和杰里都不知道答案。
+Both Lucy and Lily passed the exam. || 露西和莉莉都通过了考试。
+The more you practice, the better you will become. || 你练得越多，就会变得越好。
+This book is less interesting than that one. || 这本书没有那本书有趣。
+He is the tallest boy in our class. || 他是我们班最高的男生。
+She is one of the best teachers I have ever had. || 她是我遇到过的最好的老师之一。
+There are many people waiting at the bus stop. || 很多人正在公交站等着。
+It is important to learn a foreign language. || 学一门外语很重要。
+The problem is difficult to solve. || 这个问题很难解决。
+I find it interesting to study history. || 我发现学历史很有趣。
+She made it clear that she did not agree. || 她明确表示她不同意。
+He went to the store to buy some milk. || 他去商店买了一些牛奶。
+I need a pen to write this letter. || 我需要一支笔来写这封信。
+She is too young to go to school. || 她太小了还不能上学。
+The box is heavy enough to break the table. || 这个盒子重得足以把桌子压坏。
+We went to Paris last summer. || 去年夏天我们去了巴黎。
+During the holidays we visited many museums. || 假期里我们参观了许多博物馆。
+In the evening we often watch TV together. || 晚上我们经常一起看电视。
+On my way home I met an old friend. || 我在回家的路上遇到了一位老朋友。
+By the end of this month we will finish the project. || 到这个月底我们会完成这个项目。
+At the age of eighteen he left his hometown. || 他十八岁时离开了家乡。
+She is wearing a beautiful red dress. || 她穿着一条漂亮的红色连衣裙。
+The dog ran quickly across the field. || 那只狗快速地跑过田野。
+We listened to the teacher very carefully. || 我们非常认真地听老师讲课。
+The plane took off at exactly nine o'clock. || 飞机准时九点起飞。
+I remember seeing her at the party. || 我记得在聚会上见过她。
+He admitted making the mistake. || 他承认犯了那个错误。
+She suggested going by train. || 她建议坐火车去。
+We all enjoyed watching the basketball game. || 我们都很享受观看这场篮球比赛。
+They finished building the bridge in three years. || 他们花了三年时间建成了这座桥。
+I would like to have a cup of tea. || 我想要一杯茶。
+He prefers coffee to tea. || 他比起茶更喜欢咖啡。
+She is better at English than I am. || 她的英语比我好。
+My brother is younger than me by five years. || 我弟弟比我小五岁。
+This room is twice as large as that one. || 这个房间是那个房间的两倍大。
+The temperature today is higher than yesterday. || 今天的温度比昨天高。
+I have something important to tell you. || 我有重要的事情要告诉你。
+There is nothing wrong with your watch. || 你的手表没有任何问题。
+He can speak three languages fluently. || 他能流利地说三种语言。
+The flowers in the garden smell very sweet. || 花园里的花闻起来很香。
+She closed the door quietly. || 她轻轻地关上了门。
+We need more time to think about this. || 我们需要更多的时间来考虑这件事。
+I believe that honesty is the best policy. || 我相信诚实是最好的策略。
+The reason why he failed is that he didn't study. || 他失败的原因是他没有学习。
+What I want to know is where he went. || 我想知道的是他去了哪里。
+It was John who broke the window. || 是约翰打破了窗户。
+We should not judge a book by its cover. || 我们不应该以貌取人。
+Actions speak louder than words. || 行动胜于言语。
+The early bird catches the worm. || 早起的鸟儿有虫吃。
+Where there is a will, there is a way. || 有志者，事竟成。
+Practice makes perfect. || 熟能生巧。
+Time and tide wait for no man. || 岁月不等人。
+All that glitters is not gold. || 闪光的未必都是金子。
+A journey of a thousand miles begins with a single step. || 千里之行，始于足下。
+Knowledge is power. || 知识就是力量。
+Reading is to the mind what exercise is to the body. || 阅读之于心灵犹如运动之于身体。
+Honesty is the best policy. || 诚实是最好的策略。
+Health is better than wealth. || 健康胜过财富。
+Strike while the iron is hot. || 趁热打铁。
+Don't count your chickens before they are hatched. || 不要在小鸡孵出来之前数它们。
+Look before you leap. || 三思而后行。
+Out of sight, out of mind. || 眼不见，心不烦。
+A friend in need is a friend indeed. || 患难见真情。
+</script>
+
+<script>
+(() => {
+  'use strict';
+
+  // ---------- 1. 解析语料 ----------
+  const rawTxt = document.getElementById('sentences-txt').textContent;
+  const SENTENCES = rawTxt.split(/\r?\n/).map(s => s.trim()).filter(Boolean).map(line => {
+    const [en, zh] = line.split('||').map(s => s.trim());
+    return { en, zh };
+  });
+
+  function _shuffle(arr) {
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+  }
+  function pickQuestions(n) {
+    const picked = _shuffle(SENTENCES.slice()).slice(0, Math.min(n, SENTENCES.length));
+    return picked.map(q => {
+      const pool = SENTENCES.filter(x => x.en !== q.en).map(x => x.zh);
+      const wrongs = _shuffle(pool).slice(0, 2);
+      const opts = _shuffle([q.zh, wrongs[0], wrongs[1]]);
+      const ci = opts.indexOf(q.zh);
+      return { en: q.en, correctZh: q.zh, options: opts, correctIdx: ci };
+    });
+  }
+
+  // ---------- 2. localStorage ----------
+  const LS = { get(k, d) { try { const v = localStorage.getItem(k); return v == null ? d : JSON.parse(v); } catch { return d; } },
+               set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} } };
+
+  // ---------- 3. State ----------
+  const state = {
+    page: 'home', questionCount: 10,
+    highestScore: LS.get('lw_high', 0), totalRounds: LS.get('lw_rounds', 0),
+    questions: [], currentIdx: 0, totalScore: 0, results: [],
+    feedback: false, chosenIdx: -1, questionScore: 0,
+  };
+
+  function showPage(name) {
+    state.page = name;
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById('page-' + name).classList.add('active');
+    window.scrollTo(0, 0);
+  }
+
+  // ================================================= Home
+  function renderHome() {
+    document.getElementById('highestScore').textContent = state.highestScore;
+    document.getElementById('totalRounds').textContent = state.totalRounds;
+    document.getElementById('totalSentences').textContent = SENTENCES.length;
+    document.querySelectorAll('.diff-opt').forEach(el => {
+      el.classList.toggle('on', Number(el.dataset.count) === state.questionCount);
+    });
+  }
+  document.getElementById('countOpts').addEventListener('click', e => {
+    const el = e.target.closest('.diff-opt');
+    if (el) { state.questionCount = Number(el.dataset.count); renderHome(); }
+  });
+  document.getElementById('startBtn').addEventListener('click', () => {
+    state.questions = pickQuestions(state.questionCount);
+    state.currentIdx = 0; state.totalScore = 0; state.results = [];
+    state.feedback = false; state.chosenIdx = -1;
+    showPage('practice'); renderPractice();
+  });
+
+  // ================================================= Practice
+  function renderPractice() {
+    const cur = state.questions[state.currentIdx];
+    const total = state.questions.length;
+    document.getElementById('progressBar').style.width = ((state.currentIdx + 1) / total * 100) + '%';
+    document.getElementById('curIdx').textContent = state.currentIdx + 1;
+    document.getElementById('totalCnt').textContent = total;
+    document.getElementById('totalScore').textContent = state.totalScore;
+    document.getElementById('qNum').textContent = '第 ' + (state.currentIdx + 1) + ' 题';
+    document.getElementById('qEn').textContent = cur.en;
+
+    // 选项
+    const optsEl = document.getElementById('opts');
+    optsEl.innerHTML = '';
+    const labels = ['A', 'B', 'C'];
+    cur.options.forEach((optText, idx) => {
+      const div = document.createElement('div');
+      div.className = 'opt';
+      if (state.feedback) {
+        if (idx === cur.correctIdx) div.classList.add('right');
+        else if (idx === state.chosenIdx) div.classList.add('wrong');
+      } else if (state.chosenIdx === idx) {
+        div.classList.add('chosen');
+      }
+      div.innerHTML = '<span class="opt-label">' + labels[idx] + '</span>' +
+        '<span class="opt-text">' + optText + '</span>' +
+        (state.feedback
+          ? (idx === cur.correctIdx ? '<span class="opt-mark">✓</span>' : (idx === state.chosenIdx ? '<span class="opt-mark">✗</span>' : ''))
+          : '');
+      div.dataset.idx = idx;
+      div.addEventListener('click', onOptTap);
+      optsEl.appendChild(div);
+    });
+
+    // feedback
+    const fbEl = document.getElementById('feedback');
+    const nextBtn = document.getElementById('nextBtn');
+    if (state.feedback) {
+      fbEl.style.display = 'block';
+      document.getElementById('questionScore').textContent = state.questionScore;
+      document.getElementById('correctZh').textContent = cur.correctZh;
+      nextBtn.disabled = false;
+      nextBtn.classList.remove('disabled');
+      nextBtn.textContent = state.currentIdx + 1 < total ? '下一题 →' : '查看结果';
+    } else {
+      fbEl.style.display = 'none';
+      nextBtn.disabled = true;
+      nextBtn.classList.add('disabled');
+      nextBtn.textContent = '请选择一个翻译';
+    }
+  }
+
+  function onOptTap(e) {
+    if (state.feedback) return;
+    const idx = Number(e.currentTarget.dataset.idx);
+    const cur = state.questions[state.currentIdx];
+    const correct = idx === cur.correctIdx;
+    const questionScore = correct ? 10 : -5;
+    state.totalScore += questionScore;
+    state.results.push({
+      en: cur.en, correctZh: cur.correctZh,
+      chosenZh: cur.options[idx], chosenIdx: idx, correct, questionScore,
+    });
+    state.feedback = true; state.chosenIdx = idx; state.questionScore = questionScore;
+    renderPractice();
+  }
+
+  document.getElementById('nextBtn').addEventListener('click', () => {
+    const nextIdx = state.currentIdx + 1;
+    if (nextIdx >= state.questions.length) {
+      // 去 result
+      const correctCount = state.results.filter(r => r.correct).length;
+      const accuracy = Math.round((correctCount / state.results.length) * 100);
+      state.highestScore = Math.max(state.highestScore, state.totalScore);
+      state.totalRounds++;
+      LS.set('lw_high', state.highestScore);
+      LS.set('lw_rounds', state.totalRounds);
+
+      let emoji = '🌟', title = 'Great Job!', sub = 'Keep talking like a native';
+      if (accuracy >= 90) { emoji = '🏆'; title = 'Native Level!'; sub = '准确率超 90%，学霸！'; }
+      else if (accuracy >= 75) { emoji = '👏'; title = 'Excellent!'; sub = '很不错！'; }
+      else if (accuracy >= 55) { emoji = '💪'; title = 'Good Effort!'; sub = '继续加油'; }
+      else { emoji = '📚'; title = 'Keep Going!'; sub = '多练几次就好'; }
+
+      state.rEmoji = emoji; state.rTitle = title; state.rSub = sub;
+      state.rAccuracy = accuracy;
+      showPage('result');
+      renderResult();
+      return;
+    }
+    state.currentIdx = nextIdx;
+    state.feedback = false; state.chosenIdx = -1; state.questionScore = 0;
+    renderPractice();
+  });
+
+  // ================================================= Result
+  function renderResult() {
+    document.getElementById('rEmoji').textContent = state.rEmoji;
+    document.getElementById('rTitle').textContent = state.rTitle;
+    document.getElementById('rSub').textContent = state.rSub;
+    document.getElementById('rTotal').textContent = state.totalScore;
+    document.getElementById('rMax').textContent = state.results.length * 10;
+    document.getElementById('rPct').textContent = state.rAccuracy + '%';
+
+    const list = document.getElementById('qList');
+    list.innerHTML = '';
+    state.results.forEach((q, i) => {
+      const div = document.createElement('div');
+      div.className = 'q-item';
+      div.innerHTML = `
+        <div class="q-head">
+          <span class="q-label">第 ${i + 1} 题</span>
+          <span class="q-score" style="color:${q.questionScore > 0 ? '#95de64' : '#ff7875'}">
+            ${q.questionScore > 0 ? '+' : ''}${q.questionScore}
+          </span>
+        </div>
+        <div class="q-en">${q.en}</div>
+        <div class="q-choice ${q.correct ? 'good' : 'bad'}">你的选择：${q.chosenZh}</div>
+        <div class="q-answer">✎ 正确答案：${q.correctZh}</div>
+      `;
+      list.appendChild(div);
+    });
+  }
+  document.getElementById('homeBtn').addEventListener('click', () => { showPage('home'); renderHome(); });
+  document.getElementById('retryBtn').addEventListener('click', () => { showPage('home'); renderHome(); });
+
+  // ---------- boot ----------
+  renderHome();
+})();
+</script>
+</body>
+</html>

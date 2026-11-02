@@ -1,0 +1,63 @@
+.progress-wrap { position: relative; height: 12rpx; background: rgba(255,255,255,.15); border-radius: 999rpx; overflow: hidden; margin-top: 8rpx; }
+.progress-bar { height: 100%; background: linear-gradient(90deg, #ffd54f, #ff8f00); border-radius: 999rpx; transition: width .25s ease; }
+.progress-text { position: absolute; right: 0; top: -40rpx; font-size: 24rpx; opacity: .7; }
+
+.score-chip { text-align: center; margin: 40rpx 0 32rpx; font-size: 28rpx; opacity: .8; }
+.score-num { font-size: 44rpx; font-weight: 900; color: #ffd54f; margin-left: 8rpx; }
+
+.q-card { background: rgba(255,255,255,.08); border-radius: 24rpx; padding: 36rpx 28rpx; }
+.q-num { font-size: 26rpx; opacity: .6; margin-bottom: 16rpx; }
+.q-en {
+  font-size: 38rpx; color: #fff; line-height: 1.6;
+  padding: 24rpx;
+  background: linear-gradient(135deg, rgba(255,213,79,.12), rgba(139,0,0,.08));
+  border-radius: 14rpx;
+  border-left: 6rpx solid #ffd54f;
+  margin-bottom: 28rpx;
+}
+
+.opts { display: flex; flex-direction: column; gap: 18rpx; }
+.opt {
+  display: flex; align-items: center;
+  padding: 22rpx 24rpx;
+  background: rgba(255,255,255,.06);
+  border: 2rpx solid rgba(255,255,255,.15);
+  border-radius: 14rpx;
+  font-size: 30rpx;
+  color: rgba(255,255,255,.9);
+  transition: all .15s ease;
+  position: relative;
+}
+.opt-label {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 48rpx; height: 48rpx; border-radius: 50%;
+  background: rgba(255,255,255,.1); color: #ffd54f; font-weight: 700;
+  margin-right: 18rpx; flex-shrink: 0;
+}
+.opt-text { flex: 1; }
+.opt-mark { font-size: 44rpx; margin-left: 10rpx; }
+
+.opt:active { transform: scale(.98); }
+.opt.chosen {
+  border-color: #ffd54f;
+  background: linear-gradient(135deg, rgba(255,213,79,.22), rgba(255,143,0,.14));
+  box-shadow: 0 4rpx 20rpx rgba(255,143,0,.3);
+}
+.opt.right {
+  border-color: #52c41a;
+  background: rgba(82,196,26,.2);
+  color: #95de64;
+}
+.opt.wrong {
+  border-color: #ff4d4f;
+  background: rgba(255,77,79,.18);
+  color: #ff7875;
+}
+
+.feedback { margin-top: 24rpx; padding: 20rpx; background: rgba(0,0,0,.2); border-radius: 14rpx; }
+.fb-score { font-size: 32rpx; font-weight: 700; color: #ffd54f; margin-bottom: 8rpx; }
+.fb-ans { font-size: 26rpx; opacity: .85; color: #fff; }
+
+.actions { margin-top: 36rpx; }
+.actions .btn-primary { width: 100%; }
+.actions .disabled { opacity: .6; }

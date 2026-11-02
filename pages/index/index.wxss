@@ -1,0 +1,30 @@
+.hero { text-align: center; padding: 60rpx 0 40rpx; }
+.hero-emoji { font-size: 120rpx; line-height: 1; }
+.hero-title { font-size: 56rpx; font-weight: 900; margin-top: 16rpx; color: #ffd54f; }
+.hero-sub { font-size: 26rpx; opacity: .7; margin-top: 8rpx; letter-spacing: 1rpx; }
+
+.stat-row { display: flex; align-items: center; justify-content: space-around; padding: 16rpx 0; }
+.stat { text-align: center; }
+.stat-num { font-size: 56rpx; font-weight: 900; color: #ffd54f; }
+.stat-label { font-size: 24rpx; opacity: .7; margin-top: 4rpx; }
+.stat-divider { width: 1rpx; height: 60rpx; background: rgba(255,255,255,.2); }
+
+.card-title { font-size: 30rpx; font-weight: 700; margin-bottom: 16rpx; }
+.rule-item { font-size: 28rpx; line-height: 1.9; opacity: .9; }
+
+.diff-row { display: flex; align-items: center; gap: 24rpx; margin: 24rpx 0 36rpx; }
+.diff-label { font-size: 28rpx; opacity: .8; }
+.diff-opts { display: flex; gap: 16rpx; }
+.diff-opt {
+  padding: 12rpx 28rpx; font-size: 26rpx;
+  background: rgba(255,255,255,.1);
+  border: 1rpx solid rgba(255,255,255,.25);
+  border-radius: 999rpx; color: rgba(255,255,255,.85);
+}
+.diff-opt.on {
+  background: linear-gradient(180deg,#ffd54f,#ffb300);
+  color: #4e2c00; border-color: transparent; font-weight: 700;
+}
+
+.start-btn { margin-top: 12rpx; }
+.tip-txt { text-align: center; font-size: 22rpx; opacity: .55; margin-top: 24rpx; }

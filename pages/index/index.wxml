@@ -1,0 +1,43 @@
+<view class="container">
+  <view class="hero">
+    <view class="hero-emoji">📚</view>
+    <view class="hero-title">英语翻译练习</view>
+    <view class="hero-sub">三个中文选项，选一个对的</view>
+  </view>
+
+  <view class="card">
+    <view class="stat-row">
+      <view class="stat">
+        <view class="stat-num">{{ highestScore }}</view>
+        <view class="stat-label">最高满分</view>
+      </view>
+      <view class="stat-divider"></view>
+      <view class="stat">
+        <view class="stat-num">{{ totalRounds }}</view>
+        <view class="stat-label">累计练习</view>
+      </view>
+    </view>
+  </view>
+
+  <view class="card rules">
+    <view class="card-title">📖 玩法</view>
+    <view class="rule-item">• 每次随机 N 道题</view>
+    <view class="rule-item">• 每题三个中文翻译，选一个正确的</view>
+    <view class="rule-item">• 选对 +10 分，选错 -5 分</view>
+    <view class="rule-item">• 干扰项从题库随机抽取</view>
+  </view>
+
+  <view class="diff-row">
+    <view class="diff-label">题数</view>
+    <view class="diff-opts">
+      <view
+        wx:for="{{[5, 10, 15]}}" wx:key="*this"
+        class="diff-opt {{ questionCount === item ? 'on' : '' }}"
+        bindtap="onPickCount" data-count="{{ item }}">{{ item }} 题</view>
+    </view>
+  </view>
+
+  <button class="btn-primary start-btn" bindtap="onStart">开始练习</button>
+
+  <view class="tip-txt">题库共 {{ totalSentences }} 句</view>
+</view>

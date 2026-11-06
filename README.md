@@ -33,5 +33,5 @@ apache 2.0 github里面有代码
 
 截图 2026-10-30 08-10-162400×1350 165 KB
 
-10.
+10.houfufa79-cmyk.github.io/select-english
 
